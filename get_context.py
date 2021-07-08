@@ -31,8 +31,9 @@ def get_context(im=[[[1,2,3], [1,2,3]]],pos=[1,2,3],sz=[7,2,3,4],window=[[[1,2,3
         if(ys[i]> np.shape(im)[0]):
             ys[i]= np.shape(im)[0]
 
-
-    out=im
+    l1 = len(ys)
+    l2 = len(xs)
+    out=im[0:l1][0:l2][:]
     out=(out - np.mean(np.ravel(out)))
     out= np.multiply(window,out)
 

@@ -1,12 +1,19 @@
 import numpy as np
+import math
 
-def missdetection(now_im=None,pre_im=None,pre_pos=None,pre_sz=None,non_compressed_features=None,compressed_features=None,w2c=None,*args,**kwargs):
+def index_2d(myList, v):
+    for i, x in enumerate(myList):
+        if v in x:
+            return (i, x.index(v))
+
+def missdetection(now_im=[1,2,3,4],pre_im=[1,2,3,4],pre_pos=[1,1,3,4],pre_sz=[1,1,3,4],non_compressed_features=None,compressed_features=None,w2c=None,*args,**kwargs):
 
 
     pos= np.array([pre_pos[1],pre_pos[0]])
     target_sz= np.array([pre_sz[1],pre_sz[0]])
     padding=1
-    sz= math.floor(np.dot(target_sz,(1 + padding)))
+    sz= np.dot(target_sz,(1 + padding))
+
     scale=1
     alapha=2.25
 
@@ -19,9 +26,10 @@ def missdetection(now_im=None,pre_im=None,pre_pos=None,pre_sz=None,non_compresse
     for i in range(len(cs_temp)):
         cs_temp[i] -= math.floor(sz[1]/2)
 
-    rs,cs= np.mgrid(rs_temp, cs_temp)
+    rs = np.array(rs_temp)
+    cs = np.array(cs_temp)
     dist=rs ** 2 + cs ** 2
-    conf= np.exp(np.dot(- 0.5 / (alapha),sqrt(dist)))
+    conf= np.exp(np.dot(- 0.5 / (alapha),math.sqrt(dist)))
     conf=conf / sum(sum(conf))
     conff=np.fft.fft2(conf)
     hamming_window= np.dot(np.hamming(sz[0]), np.transpose(np.hanning(sz[1])))
@@ -63,9 +71,7 @@ def missdetection(now_im=None,pre_im=None,pre_pos=None,pre_sz=None,non_compresse
 
     # target location is at the maximum response
     if max(np.ravel(response)) > 0.004:
-        #row,col= find(response == max(ravel(response)),1)
-        row = 1
-        col = 2
+        row,col=  index_2d(response, max(np.ravel(response)))
         newpos= pre_pos - np.array([pre_sz[0],pre_sz[1]]) + np.array([col,row])
         obj= np.array([newpos[0],newpos[1],pre_sz[0],pre_sz[1]])
         det= np.array([newpos[0] - np.dot(1 / 2,pre_sz[0]),newpos[1] - np.dot(1 / 2,pre_sz[1]), newpos[0] + np.dot(1 / 2,pre_sz[1]),newpos[1] + np.dot(1 / 2,pre_sz[1]),0.9])

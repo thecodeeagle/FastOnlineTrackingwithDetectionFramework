@@ -1,5 +1,6 @@
-
-def get_pregion(im=None,pos=None,sz=None,*args,**kwargs):
+import math
+import numpy as np
+def get_pregion(im=None,pos=[7,8,3],sz=[4,5,3],*args,**kwargs):
 
     # [out_npca, out_pca] = get_subwindow(im, pos, sz, non_pca_features, pca_features, w2c)
 
@@ -9,17 +10,17 @@ def get_pregion(im=None,pos=None,sz=None,*args,**kwargs):
 # the PCA-features reshaped to [prod(sz) num_pca_feature_dim]. w2c is the
 # Color Names matrix if used.
 
-    
+
     #check for out-of-bounds coordinates, and set them to the values at
     #the borders
     xs = list(range(1,sz[0]+1))
     ys = list(range(1,sz[1]+1))
 
     for i in range(len(xs)):
-        xs[i] = math.floor(pos[0]+np.dot(3,xs[i])-np.dot(1.5, floor(sz[0])))
+        xs[i] = math.floor(pos[0]+np.dot(3,xs[i])-np.dot(1.5, math.floor(sz[0])))
 
     for i in range(len(ys)):
-        ys[i] += math.floor(pos[1]+np.dot(3,xs[i])-np.dot(1.5, floor(sz[1])))
+        ys[i] += math.floor(pos[1]+np.dot(3,ys[i])-np.dot(1.5, math.floor(sz[1])))
 
     for i in range(len(xs)):
         if(xs[i]<1):

@@ -1,7 +1,11 @@
 import numpy as np
 import math
+from get_subwindow import get_subwindow
+from get_pregion import get_pregion
+from get_region import get_region
+import math
 
-def patchmatch(pre_im=None,pre_pos=None,pre_sz=None,now_im=None,now_pos=None,now_sz=None,non_compressed_features=None,compressed_features=None,w2c=None,*args,**kwargs):
+def patchmatch(pre_im=[[[1,2,3],[2,3,4]], [[1,2,3],[2,3,4]]],pre_pos=[1,2,3,4],pre_sz=[1,2,3,4],now_im=[1,2,3,4],now_pos=[1,2,3,4],now_sz=[1,2,3,4],non_compressed_features=[1,2,3,4],compressed_features=[1,2,3,4],w2c=None,*args,**kwargs):
 
 
     num_compressed_dim=2
@@ -9,9 +13,9 @@ def patchmatch(pre_im=None,pre_pos=None,pre_sz=None,now_im=None,now_pos=None,now
     output_sigma_factor=1 / 16
     sigma=0.2
 
-    xo_npca,xo_pca=get_subwindow(pre_im, np.array([pre_pos[1],pre_pos[0]]),concat([pre_sz[1],pre_sz[0]]),non_compressed_features,compressed_features,w2c)
+    xo_npca,xo_pca=get_subwindow(pre_im, np.array([pre_pos[1],pre_pos[0]]),np.array([pre_sz[1],pre_sz[0]]),non_compressed_features,compressed_features,w2c)
 
-    x1,y1,x2,y2=get_pregion(pre_im,pre_pos,pre_sz,nargout)
+    x1,y1,x2,y2=get_pregion(pre_im,pre_pos,pre_sz)
     x11,y11,x22,y22=get_region(now_im,now_pos,now_sz)
 
     if x11 < x1 or y11 < y1 or x22 > x2 or y22 > y2:
@@ -22,7 +26,7 @@ def patchmatch(pre_im=None,pre_pos=None,pre_sz=None,now_im=None,now_pos=None,now
         #im2= mexResize(im_patch,concat([pre_sz(2),pre_sz(1)]))
         z_npca,z_pca= get_subwindow(im2, np.dot(1 / 2, np.array([pre_sz[1],pre_sz[0]])), np.array([pre_sz[1],pre_sz[0]]),non_compressed_features,compressed_features,w2c)
         data_mean= mean(z_pca,1)
-        data_matrix=bsxfun(minus,z_pca,data_mean)
+        data_matrix= z_pca*data_mean
 
         cov_matrix= np.dot(1 / (math.prod(now_sz) - 1),(np.dot( np.transpose(data_matrix),data_matrix)))
         pca_basis,temp1, temp2= np.linalg.svd(cov_matrix)
@@ -54,4 +58,4 @@ def patchmatch(pre_im=None,pre_pos=None,pre_sz=None,now_im=None,now_pos=None,now
     return response
 
 if __name__ == '__main__':
-    pass
+    patchmatch()

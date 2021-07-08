@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def feature_projection(x_npca=[],x_pca=[[1,2,3,4],[1,2,3,4], [1,2,3,4],[1,2,3,4]] ,projection_matrix=[[1,2,3,4], [3,4,3,4], [5,6,3,4], [7,8,3,4]],cos_window=[[1,2], [3,4]],*args,**kwargs):
+def feature_projection(x_npca=[],x_pca=[[1,2,3,4],[1,2,3,4], [1,2,3,4],[1,2,3,4]] ,projection_matrix=[[1,2,3,4], [3,4,3,4], [5,6,3,4], [7,8,3,4]],cos_window=[[[1,2,3,4], [3,4,3,4]], [[1,2,3,4], [3,4,3,4]]],*args,**kwargs):
 
     # z = feature_projection(x_npca, x_pca, projection_matrix, cos_window)
 
@@ -15,7 +15,8 @@ def feature_projection(x_npca=[],x_pca=[[1,2,3,4],[1,2,3,4], [1,2,3,4],[1,2,3,4]
 
     else:
         # get dimensions
-        height,width= np.shape(cos_window)
+        height= np.array(cos_window).shape[0]
+        width = np.array(cos_window).shape[1]
 
         num_pca_in,num_pca_out= np.shape(projection_matrix)
 
@@ -30,8 +31,8 @@ def feature_projection(x_npca=[],x_pca=[[1,2,3,4],[1,2,3,4], [1,2,3,4],[1,2,3,4]
 
 
     # do the windowing of the output
-    #np.broadcast_to(cos_window, z.shape)
-    #z = cos_window*z
+
+    z = cos_window*z
 
     return z
 

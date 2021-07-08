@@ -1,5 +1,6 @@
-
-def get_region(im=None,pos=None,sz=None,*args,**kwargs):
+import numpy as np
+import math
+def get_region(im=np.array([(1,2,3), (4,5,6)]),pos=[7,8,3],sz=[4,5,3],*args,**kwargs):
 
     # [out_npca, out_pca] = get_subwindow(im, pos, sz, non_pca_features, pca_features, w2c)
 
@@ -9,11 +10,12 @@ def get_region(im=None,pos=None,sz=None,*args,**kwargs):
 # the PCA-features reshaped to [prod(sz) num_pca_feature_dim]. w2c is the
 # Color Names matrix if used.
 
-#    if isscalar(sz):
-#        sz=concat([sz,sz])
+    if np.isscalar(sz):
+        sz=np.array([sz,sz])
     xs = list(range(1,sz[0]+1))
     ys = list(range(1,sz[1]+1))
-
+    xs = np.array(xs)
+    ys = np.array(ys)
     for i in range(len(xs)):
         xs[i] += math.floor(pos[0] - (sz[0] / 2))
 
@@ -30,7 +32,7 @@ def get_region(im=None,pos=None,sz=None,*args,**kwargs):
             ys[i] = 1
 
     for i in range(len(xs)):
-        if(xs[i]>np.shape(im)[1]):
+        if(xs[i]>np.shape(im[1])):
             xs[i]= np.shape(im)[1]
 
     for i in range(len(ys)):

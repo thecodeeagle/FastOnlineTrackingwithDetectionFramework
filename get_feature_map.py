@@ -1,6 +1,7 @@
 import numpy as np
+import math
 
-def get_feature_map(im_patch=None,features=None,w2c=None,*args,**kwargs):
+def get_feature_map(im_patch=[1,2,3,4],features=[1,2,3,4],w2c=None,*args,**kwargs):
     # out = get_feature_map(im_patch, features, w2c)
 
     # Extracts the given features from the image patch. w2c is the
@@ -14,7 +15,7 @@ def get_feature_map(im_patch=None,features=None,w2c=None,*args,**kwargs):
     valid_features= np.array(['gray','cn'])
 
     # the dimension of the valid features
-    feature_levels= np.transpose(np.concatenate([1,10]))
+    feature_levels= np.transpose(np.array([1,10]))
 
     num_valid_features= len(valid_features)
 
@@ -22,7 +23,7 @@ def get_feature_map(im_patch=None,features=None,w2c=None,*args,**kwargs):
 
     # get the used features
     for i in range(num_valid_features):
-        used_features[i]=any(valid_features[i]==features)
+        used_features[i]=(valid_features[i]==features)
 
 
     # total number of used feature levels
@@ -39,7 +40,9 @@ def get_feature_map(im_patch=None,features=None,w2c=None,*args,**kwargs):
     else:
         # Features that are available for color sequances
         # allocate space (for speed)
-        out= np.zeros((np.shape(im_patch)[0],np.shape(im_patch)[1],num_feature_levels), dtype="float")
+        im_patch = np.array(im_patch)
+
+        out= np.zeros((im_patch.shape[0],im_patch.shape[1], math.floor(num_feature_levels)))
 
         if used_features[0]:
         #    out[:,:,level + 1]=  rgb2gray(im_patch)) / 255 - 0.5 ..
@@ -55,6 +58,7 @@ def get_feature_map(im_patch=None,features=None,w2c=None,*args,**kwargs):
                 w2c=temp.w2crs
 
             # extract color descriptor
-    #        out[:,:,level:level+10]=  im2c(single(im_patch),w2c,- 2) ..
+            out[:][:][level:level+10]=  im2c[:im_patch][w2c][- 2]
 
             level=level + feature_levels[3]
+    return out
