@@ -3,19 +3,19 @@ import numpy as np
 
 def blockmatch(detections=None,objects=None,framenum=None,im_directory=None,images=None,params=None,pnum=None,*args,**kwargs):
 
-    object_pnum=dot(ceil((pnum + 6) / 5),5)
+    object_pnum= np.dot(ceil((pnum + 6) / 5),5)
     scores= np.zeros(object_pnum,object_pnum,numel(images))
     results= np.zeros(1,object_pnum,numel(images))
     resulttmp= np.zeros(1,object_pnum,numel(images))
-    virobjects=cellarray([])
-    virresults=cell(1,framenum)
-    virscore=cell(1,framenum)
-    labels=zeros(1,object_pnum,framenum)
+    virobjects= np.array([])
+    virresults= np.array(framenum)
+    virscore= np.array(framenum)
+    labels= np.zeros(1,object_pnum,framenum)
     flag=1
     virflag=0
-    non_compressed_features=cellarray(['gray'])
-    compressed_features=cellarray(['cn'])
-    temp=load('w2crs')
+    non_compressed_features= np.array(['gray'])
+    compressed_features= np.array(['cn'])
+    temp= load('w2crs')
     w2c=temp.w2crs
     for frame in arange(1,min(framenum,numel(objects))).reshape(-1):
         ## visualize process
