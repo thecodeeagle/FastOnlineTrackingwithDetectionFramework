@@ -4,7 +4,7 @@ from get_subwindow import get_subwindow
 from getpatch import getpatch
 from feature_projection import feature_projection
 
-def pmatch(vir_im=np.array([((1,2,3), (4,5,6)), ((1,2,3), (4,5,6))]),virobjects=[[4,5,6,6,8], [4,5,6,6,8]],now_im=np.array([((1,2,3), (4,5,6)), ((1,2,3), (4,5,6))]),now_pos=[4,5,6],now_sz=[4,5,6],non_compressed_features=[4,5,6],compressed_features=[4,5,6],w2c=None,*args,**kwargs):
+def pmatch(vir_im=np.array([((1,2,3), (4,5,6)), ((1,2,3), (4,5,6))]),virobjects=[[6,0,6,1,8], [6,0,6,1,8]],now_im=np.array([((1,2,3), (4,5,6)), ((1,2,3), (4,5,6))]),now_pos=[4,5,6],now_sz=[4,5,6],non_compressed_features=[4,5,6],compressed_features=[4,5,6],w2c=None,*args,**kwargs):
 
     num_compressed_dim=2
     lambda_=0.01
@@ -28,7 +28,7 @@ def pmatch(vir_im=np.array([((1,2,3), (4,5,6)), ((1,2,3), (4,5,6))]),virobjects=
 
     projection_matrix= pca_basis[:,0:num_compressed_dim]
     projection_variances= pca_variances[0:num_compressed_dim,0:num_compressed_dim]
-
+    print(pre_sz[0])
     cos_window= np.dot(np.hanning(pre_sz[1]), np.transpose(np.hanning(pre_sz[0])))
 
     zp=feature_projection(z_npca,z_pca,projection_matrix,cos_window)
