@@ -1,12 +1,14 @@
 
 import numpy as np
+import math
 
-def blockmatch(detections=None,objects=None,framenum=None,im_directory=None,images=None,params=None,pnum=None,*args,**kwargs):
 
-    object_pnum= np.dot(ceil((pnum + 6) / 5),5)
-    scores= np.zeros(object_pnum,object_pnum,numel(images))
-    results= np.zeros(1,object_pnum,numel(images))
-    resulttmp= np.zeros(1,object_pnum,numel(images))
+def blockmatch(detections=None,objects=None,framenum=None,im_directory=None,images=None,params=None,pnum=5,*args,**kwargs):
+
+    object_pnum= np.dot(math.ceil((pnum + 6) / 5),5)
+    scores= np.zeros((object_pnum,object_pnum,np.size(images)))
+    results= np.zeros((1,object_pnum,np.size(images)))
+    resulttmp= np.zeros((1,object_pnum,np.size(images)))
     virobjects= np.array([])
     virresults= np.array(framenum)
     virscore= np.array(framenum)
@@ -15,12 +17,12 @@ def blockmatch(detections=None,objects=None,framenum=None,im_directory=None,imag
     virflag=0
     non_compressed_features= np.array(['gray'])
     compressed_features= np.array(['cn'])
-    temp= load('w2crs')
-    w2c=temp.w2crs
-    for frame in arange(1,min(framenum,numel(objects))).reshape(-1):
+    #temp= load('w2crs.mat')
+    w2c=w2crs
+    for frame in arange(1,min(framenum,np.size(objects))).reshape(-1):
         ## visualize process
         clc
-        fprintf('Processing %.1f%%\n',dot(frame,100) / min(framenum,numel(objects)))
+        fprintf('Processing %.1f%%\n',dot(frame,100) / min(framenum,np.size(objects)))
         infor=objects[frame]
 
         m=size(infor,1)
