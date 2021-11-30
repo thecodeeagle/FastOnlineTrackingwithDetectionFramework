@@ -1,22 +1,17 @@
-# Generated with SMOP  0.41
-from libsmop import *
-# info_get.m
 
-    
-@function
 def info_get(x=None,*args,**kwargs):
     varargin = info_get.varargin
     nargin = info_get.nargin
 
     ## change detection format
     m,n=size(x,nargout=2)
-# info_get.m:3
+
     if m == 1:
         object=copy(x)
-# info_get.m:5
+
         for num in arange(1,n).reshape(-1):
             detectionresult=x[1,num]
-# info_get.m:7
+
             m1,n1=size(detectionresult,nargout=2)
 # info_get.m:8
             if n1 == 5:
@@ -36,9 +31,8 @@ def info_get(x=None,*args,**kwargs):
 # info_get.m:18
     else:
         error('wrong detection format')
-    
+
     return object
-    
+
 if __name__ == '__main__':
     pass
-    
